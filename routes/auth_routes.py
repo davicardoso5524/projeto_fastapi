@@ -3,7 +3,7 @@ from models.models import Usuario
 from sqlalchemy.orm import Session
 from dependencies.db import pegar_sessao
 from dependencies.token import verificar_token
-from app.main import bcrypt_context, ALGORITHM, ACESS_TOKEN_EXPIRE_MINUTES, SECRET_KEY
+from app.main import bcrypt_context, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES, SECRET_KEY
 from schemas.usuario import UsuarioSchema
 from schemas.login import LoginSchema
 from jose import jwt, JWTError
@@ -13,7 +13,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 
 auth_router = APIRouter(prefix='/auth', tags=['Auth'])
 
-def criar_token(id_usuario, duracao_token=timedelta(minutes=ACESS_TOKEN_EXPIRE_MINUTES)):
+def criar_token(id_usuario, duracao_token=timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)):
     data_expiracao = datetime.now(timezone.utc) + duracao_token
     dic_info = {"sub": str(id_usuario), "exp": data_expiracao}
     jwt_codificado = jwt.encode(dic_info, SECRET_KEY, ALGORITHM)

@@ -1,11 +1,12 @@
 from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, Boolean, Float
 from sqlalchemy.orm import declarative_base, relationship
 from sqlalchemy_utils import ChoiceType
+import os
 
 # Alembic é responsável por fazer as migrates/migrations no fastapi
 
 # Cria a conexão do seu banco
-db = create_engine("sqlite:///./banco.db3")
+db = create_engine(f"sqlite:///database/banco.db3")
 
 # Cria a base do seu banco de dados
 Base = declarative_base()

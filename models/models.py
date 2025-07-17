@@ -1,11 +1,11 @@
 from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, Boolean, Float
-from sqlalchemy.orm import declarative_base
+from sqlalchemy.orm import declarative_base, relationship
 from sqlalchemy_utils import ChoiceType
 
 # Alembic é responsável por fazer as migrates/migrations no fastapi
 
 # Cria a conexão do seu banco
-db = create_engine("sqlite:///database/banco.db3")
+db = create_engine("sqlite:///./banco.db3")
 
 # Cria a base do seu banco de dados
 Base = declarative_base()
@@ -57,11 +57,18 @@ class Pedido(Base):
     status = Column("status", String) # Pendente, cancelado, finalizado
     usuario = Column("usuario", ForeignKey("usuarios.id"))
     preco = Column("preco", Float, nullable=False)
+    itens = relationship("ItemPedido", cascade="all, delete")
 
     def __init__(self, usuario, status="PENDENTE", preco=0):
         self.usuario = usuario
         self.status = status
         self.preco = preco
+
+    def calcular_preco(self):
+        # Percorrer todos os itens do pedido
+        # Somar todos os preços de todos os itens dos pedidos
+        # Editar no campo "preço" o valor final do preço do pedido
+        self.preco = sum(item.preco_unitario * item.quantidade for item in self.itens)
 
 class ItemPedido(Base):
     __tablename__ = "itens_pedido"
